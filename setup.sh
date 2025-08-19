@@ -18,17 +18,19 @@ main_menu() {
 [2] Configurar Timezone (ex.: America/Sao_Paulo)
 [3] Instalar Docker (repo oficial + daemon.json)
 [4] Swarm & Rede (init + overlay)
-[5] Ver log do painel
+[5] Traefik v3.0.4 (Swarm + Cloudflare DNS-01)
+[6] Ver log do painel
 [0] Sair
 MENU
   echo
   read -r -p "Escolha uma opção: " opt
   case "${opt:-}" in
-    1) bash modules/01-update-only.sh   2>&1 | tee -a "$LOG_FILE";;
-    2) bash modules/02-timezone.sh      2>&1 | tee -a "$LOG_FILE";;
-    3) bash modules/03-docker.sh        2>&1 | tee -a "$LOG_FILE";;
-    4) bash modules/04-swarm-network.sh 2>&1 | tee -a "$LOG_FILE";;
-    5) ${PAGER:-less} "$LOG_FILE";;
+    1) bash modules/01-update-only.sh    2>&1 | tee -a "$LOG_FILE";;
+    2) bash modules/02-timezone.sh       2>&1 | tee -a "$LOG_FILE";;
+    3) bash modules/03-docker.sh         2>&1 | tee -a "$LOG_FILE";;
+    4) bash modules/04-swarm-network.sh  2>&1 | tee -a "$LOG_FILE";;
+    5) bash modules/05-traefik.sh        2>&1 | tee -a "$LOG_FILE";;
+    6) ${PAGER:-less} "$LOG_FILE";;
     0) echo "Até mais!"; exit 0;;
     *) echo "Opção inválida."; sleep 1;;
   esac
