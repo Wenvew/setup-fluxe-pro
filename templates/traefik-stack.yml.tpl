@@ -1,12 +1,10 @@
-version: "3.8"
-
 services:
   traefik:
     image: traefik:3.0.4
     command:
       - "--providers.swarm=true"
       - "--providers.swarm.exposedbydefault=false"
-      - "--providers.swarm.network=network_public"
+      - "--providers.swarm.network=${NETWORK_NAME}"
 
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
@@ -22,6 +20,7 @@ services:
       - "--api.dashboard=true"
       - "--api.insecure=false"
       - "--log.level=INFO"
+
       - "--accesslog=true"
       - "--accesslog.format=json"
       - "--accesslog.filepath=/logs/access.log"
@@ -34,8 +33,7 @@ services:
       - "80:80"
       - "443:443"
 
-    networks:
-      - network_public
+    networks: [ ${NETWORK_NAME} ]
 
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
@@ -54,12 +52,13 @@ services:
         constraints: [ "node.role == manager" ]
       labels:
         - "traefik.enable=true"
-        - "traefik.swarm.network=network_public"
         - "traefik.http.services.traefik.loadbalancer.server.port=80"
+
         - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_HOST}`)"
         - "traefik.http.routers.traefik.entrypoints=websecure"
         - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
         - "traefik.http.routers.traefik.service=api@internal"
+
         - "traefik.http.middlewares.dashboard-auth.basicauth.usersfile=/usersfile"
         - "traefik.http.routers.traefik.middlewares=dashboard-auth@swarm"
 
@@ -69,7 +68,7 @@ services:
         mode: 0400
 
 networks:
-  network_public:
+  ${NETWORK_NAME}:
     external: true
 
 secrets:
