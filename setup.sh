@@ -17,7 +17,8 @@ main_menu() {
 [1] Atualizar VPS (somente apt update/upgrade)
 [2] Configurar Timezone (ex.: America/Sao_Paulo)
 [3] Instalar Docker (repo oficial + daemon.json)
-[4] Ver log do painel
+[4] Swarm & Rede (init + overlay)
+[5] Ver log do painel
 [0] Sair
 MENU
   echo
@@ -26,7 +27,8 @@ MENU
     1) bash modules/01-update-only.sh   2>&1 | tee -a "$LOG_FILE";;
     2) bash modules/02-timezone.sh      2>&1 | tee -a "$LOG_FILE";;
     3) bash modules/03-docker.sh        2>&1 | tee -a "$LOG_FILE";;
-    4) ${PAGER:-less} "$LOG_FILE";;
+    4) bash modules/04-swarm-network.sh 2>&1 | tee -a "$LOG_FILE";;
+    5) ${PAGER:-less} "$LOG_FILE";;
     0) echo "Até mais!"; exit 0;;
     *) echo "Opção inválida."; sleep 1;;
   esac
