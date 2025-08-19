@@ -71,8 +71,8 @@ docker compose -f "${STACK_OUT}" config >/dev/null && log "YAML OK"
 log "Deploy stack 'traefik'"
 docker stack deploy -c "${STACK_OUT}" traefik
 
-log "Acompanhar ACME/DNS por 40s..."
-timeout 40s bash -c 'docker service logs -f --since 2m traefik_traefik | egrep -Ei "acme|letsencrypt|dns|challenge|certificate|error|warn" || true'
+log "Acompanhar ACME/DNS por 40s (não aborta se expirar o tempo)..."
+timeout 40s bash -c 'docker service logs -f --since 2m traefik_traefik | egrep -Ei "acme|letsencrypt|dns|challenge|certificate|error|warn" || true' || true
 
 log "Testes rápidos"
 curl -I "http://${TRAEFIK_HOST}" || true

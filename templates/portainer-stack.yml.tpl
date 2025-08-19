@@ -12,7 +12,7 @@ services:
 
   portainer:
     image: portainer/portainer-ce:2.21.4
-    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    command: -H tcp://tasks.agent:9001 --tlsskipverify ${PORTAINER_ADMIN_PASSWORD_FLAG}
     volumes:
       - portainer_data:/data
     networks: [ ${NETWORK_NAME} ]
@@ -28,6 +28,7 @@ services:
         - "traefik.http.routers.portainer.entrypoints=websecure"
         - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
         - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+${PORTAINER_ADMIN_SECRET_BLOCK}
 
 networks:
   ${NETWORK_NAME}:
@@ -35,3 +36,5 @@ networks:
 
 volumes:
   portainer_data:
+
+${PORTAINER_SECRETS_DEF_BLOCK}
