@@ -21,6 +21,7 @@ main_menu() {
 [5] Traefik v3.0.4 (Swarm + Cloudflare DNS-01)
 [6] Portainer (Swarm + Traefik)
 [7] Ver log do painel
+[8] Instalar tudo (1→6)
 [0] Sair
 MENU
   echo
@@ -32,7 +33,8 @@ MENU
     4) bash modules/04-swarm-network.sh  2>&1 | tee -a "$LOG_FILE";;
     5) bash modules/05-traefik.sh        2>&1 | tee -a "$LOG_FILE";;
     6) bash modules/06-portainer.sh      2>&1 | tee -a "$LOG_FILE";;
-    7) ${PAGER:-less} "$LOG_FILE";;
+    7)  "";;
+    8) bash modules/00-full-setup.sh 2>&1 | tee -a "$LOG_FILE";;
     0) echo "Até mais!"; exit 0;;
     *) echo "Opção inválida."; sleep 1;;
   esac
